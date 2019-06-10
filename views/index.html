@@ -27,12 +27,12 @@
 
     <div class="header">
         <a href="#" class="logo fl"><img src="/static/img/logo.png" alt="logo"></a>
-        <a href="#" class="logout fr">退 出</a>
+        <a href="/login" class="logout fr">退 出</a>
     </div>
     
     <div class="side_bar">
         <div class="user_info">
-            <img src="/static/img/person.png" alt="张大山">
+            <img src="/static/img/person.png" alt="">
             <p>欢迎你 <em>{{.account}}</em></p>
         </div>
 
@@ -83,10 +83,20 @@
             </table>
 
             <ul class="pagenation">
-                <a href="javascript:;">上一页 </a> </li>
-                <li> <a href="javascript:;">下一页</a></li>
-        <li><a href="#">末页</a></li>
-        <li>共5条记录/共5页/当前1页</li>
+                <li><a href="/index?pageIndex=1">首页</a></li>
+                {{if compare .FirPage true}}
+                    <li>上一页</li>
+                {{else}}
+                    <li><a href="/index?pageIndex={{.pageIndex | ShowPrePage}}">上一页</a></li>
+                {{end}}
+
+                {{if compare .LastPage true}}
+                    <li>下一页</li>
+                {{else}}
+                    <li> <a href="/index?pageIndex={{.pageIndex | ShowNextPage}}">下一页</a></li>
+                {{end}}
+                <li><a href="/index?pageIndex={{.pageSize}}">末页</a></li>
+        <li>共{{.count}}条记录/共{{.pageSize}}页/当前第{{.pageIndex}}页</li>
             </ul>
         </div>
     </div>

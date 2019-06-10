@@ -6,10 +6,9 @@ import (
 )
 
 func init() {
-	beego.Router("/", &controllers.MainController{})
-	//beego.Router("/abc", &controllers.MainController{})
-	beego.Router("/register", &controllers.MainController{})
-	beego.Router("/login", &controllers.MainController{}, "get:ShowLogin;post:HandleLogin")
+	beego.Router("/", &controllers.UserController{})
+	beego.Router("/register", &controllers.UserController{})
+	beego.Router("/login", &controllers.UserController{}, "get:ShowLogin;post:HandleLogin")
 	beego.Router("/index", &controllers.MainController{}, "get:ShowIndex")
 	beego.Router("/addarticle", &controllers.MainController{}, "get:ShowAdd;post:HandleAdd")
 	beego.Router("/content", &controllers.MainController{}, "get:ShowContent")

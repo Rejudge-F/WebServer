@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <style type="text/css">
+        body{
+            background-image:url("./static/img/login-bg.jpg");
+            background-position: center center;
+            /* 背景图不平铺 */
+            background-repeat: no-repeat;
+            /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+            background-attachment: fixed;  //此条属性必须设置否则可能无效/
+            /* 让背景图基于容器大小伸缩 */
+        background-size: cover;
+            /* 设置背景颜色，背景图加载过程中会显示背景色 */
+            background-color: #CCCCCC;
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="login_logo">
+        <img src="/static/img/logo.png" alt="">
+    </div>  
+    <form  class="login_form" name = "login" method = "post"  action="/">
+        <h1 class="login_title">用户注册</h1>
+        <input type="text" placeholder="用户名" class="input_txt" name="username">
+        <input type="password" placeholder="密码" class="input_txt" name = "password">
+        <input type="submit" value="注 册" class="input_sub">
+    </form>
+</body>
+</html>

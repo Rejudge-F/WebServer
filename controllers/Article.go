@@ -12,6 +12,23 @@ type MainController struct {
 	beego.Controller
 }
 
+func (c *MainController) HandleIndex() {
+	typeName := c.GetString("select")
+	if typeName == "" {
+		beego.Info("null name")
+		c.Redirect("/index", 302)
+		return
+	}
+	var arti []models.Article
+	o := orm.NewOrm()
+	_, err := o.QueryTable("Article").RelatedSel("ArticleType").Filter("ArticleType__TypeName", typeName).All(&arti)
+	if err != nil {
+		beego.Info(err)
+	}
+	beego.Info(arti)
+
+}
+
 func (c *MainController) ShowIndex() {
 	o := orm.NewOrm()
 	var article []models.Article
@@ -49,7 +66,13 @@ func (c *MainController) ShowIndex() {
 		LastPage := true
 		c.Data["LastPage"] = LastPage
 	}
+	var artiType []models.ArticleType
+	_, err = o.QueryTable("article_type").All(&artiType)
+	if err != nil {
+		beego.Info(err)
+	}
 
+	c.Data["types"] = artiType
 	c.Data["count"] = count
 	c.Data["pageSize"] = pageSize
 	c.Data["pageIndex"] = pageIndex
@@ -200,4 +223,32 @@ func (c *MainController) HandleDelete() {
 	}
 	_, err = o.Delete(&arti)
 	c.Redirect("/index", 302)
+}
+
+func (c *MainController) ShowType() {
+	var articleType []models.ArticleType
+	o := orm.NewOrm()
+	_, err := o.QueryTable("article_type").All(&articleType)
+	if err != nil {
+		beego.Info(err)
+	}
+	c.Data["articleType"] = articleType
+	c.TplName = "addType.html"
+}
+
+func (c *MainController) HandleType() {
+	typeName := c.GetString("typeName")
+	if typeName == "" {
+		beego.Info("null name")
+		c.Redirect("/addtype", 302)
+		return
+	}
+	var Type models.ArticleType
+	Type.TypeName = typeName
+	o := orm.NewOrm()
+	_, err := o.Insert(&Type)
+	if err != nil {
+		beego.Info(err)
+	}
+	c.Redirect("/addtype", 302)
 }

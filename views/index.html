@@ -41,7 +41,7 @@
             <ul class="sub_menu show">
                 <li><a href="#" class="icon031">文章列表</a></li>
                 <li><a href="/addarticle" class="icon032">添加文章</a></li>
-                <li><a href="#" class="icon034">添加分类</a></li>
+                <li><a href="/addtype" class="icon034">添加分类</a></li>
             </ul>
         </div>
     </div>
@@ -52,12 +52,14 @@
         </div>
         <div class="pannel">
             <span class="sel_label">请选择文章分类：</span>
-            <select name="select" id="select" class="sel_opt">
-                        <option selected="true">财经新闻</option>
-                <option>体育新闻</option>
-                <option>科技新闻</option>
-            </select>
-
+            <form id="form" method="post" action="/index">
+                <select name="select" id="select" class="sel_opt">
+                    {{range .types}}
+                            <option selected="true">{{.TypeName}}</option>
+                    {{end}}
+                </select>
+                <input type="submit" hidden="hidden">
+            </form>
             <table class="common_table">
                 <tr>
                     <th width="43%">文章标题</th>
@@ -77,7 +79,7 @@
                     <td>{{.Acount}}</td>
                     <td><a href="/delete?id={{.Id}}" class="dels">删除</a></td>
                     <td><a href="/update?id={{.Id}}">编辑</a></td>
-                    <td>财经新闻</td>
+                    <td>{{.AtypeName}}</td>
                 </tr>
                 {{end}}
             </table>

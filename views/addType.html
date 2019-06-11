@@ -40,17 +40,18 @@
                     <th width="70%">类别名称</th>
                     <th width="20%">管理操作</th>
                 </tr>
-
+                {{range .articleType}}
                 <tr>
-                    <td>1</td>
-                    <td>体育新闻</td>
+                    <td>{{.Id}}</td>
+                    <td>{{.TypeName}}</td>
                     <td><a href="javascript:;" class="edit">删除</a><a href="javascript:;" class="edit">编辑</a></td>
                 </tr>
+                {{end}}
 
 
                 <tr>
                     <td colspan="3">
-                    <form >
+                    <form method="post" action="/addtype">
                         <input type="text" class="type_txt" placeholder="添加分类" name="typeName">
                         <input type="submit" class="addtype" value="增加分类">
                     </form>

@@ -26,7 +26,7 @@ type Article struct {
 
 type ArticleType struct {
 	Id       int
-	TypeName string     `orm:size(20)`
+	TypeName string     `orm:"size(20)"`
 	Articles []*Article `orm:"reverse(many)"`
 }
 

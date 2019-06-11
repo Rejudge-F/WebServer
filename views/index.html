@@ -52,10 +52,10 @@
         </div>
         <div class="pannel">
             <span class="sel_label">请选择文章分类：</span>
-            <form id="form" method="post" action="/index">
+            <form id="form" method="get" action="/index">
                 <select name="select" id="select" class="sel_opt">
                     {{range .types}}
-                            <option selected="true">{{.TypeName}}</option>
+                            <option>{{.TypeName}}</option>
                     {{end}}
                 </select>
                 <input type="submit" hidden="hidden">
@@ -71,15 +71,15 @@
                     <th width="10%">文章类型</th>
                 </tr>
 
-                {{range .articles}}
+                {{range $index ,$val := .articles}}
                 <tr>
-                    <td>{{.Aname}}</td>
-                    <td><a href="/content?id={{.Id}}">查看详情</a></td>
-                    <td> {{.Atime}}</td>
-                    <td>{{.Acount}}</td>
-                    <td><a href="/delete?id={{.Id}}" class="dels">删除</a></td>
-                    <td><a href="/update?id={{.Id}}">编辑</a></td>
-                    <td>{{.AtypeName}}</td>
+                    <td>{{$val.Aname}}</td>
+                    <td><a href="/content?id={{$val.Id}}">查看详情</a></td>
+                    <td> {{$val.Atime}}</td>
+                    <td>{{$val.Acount}}</td>
+                    <td><a href="/delete?id={{$val.Id}}" class="dels">删除</a></td>
+                    <td><a href="/update?id={{$val.Id}}">编辑</a></td>
+                    <td>{{$val.AtypeName.TypeName}}</td>
                 </tr>
                 {{end}}
             </table>

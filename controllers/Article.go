@@ -4,6 +4,7 @@ import (
 	"WebServer/models"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"path"
 	"strconv"
 	"time"
 )
@@ -13,19 +14,6 @@ type MainController struct {
 }
 
 func (c *MainController) HandleIndex() {
-	typeName := c.GetString("select")
-	if typeName == "" {
-		beego.Info("null name")
-		c.Redirect("/index", 302)
-		return
-	}
-	var arti []models.Article
-	o := orm.NewOrm()
-	_, err := o.QueryTable("Article").RelatedSel("ArticleType").Filter("ArticleType__TypeName", typeName).All(&arti)
-	if err != nil {
-		beego.Info(err)
-	}
-	beego.Info(arti)
 
 }
 
@@ -34,7 +22,7 @@ func (c *MainController) ShowIndex() {
 	var article []models.Article
 	qs := o.QueryTable("article")
 
-	count, err := qs.Count()
+	count, err := qs.RelatedSel("AtypeName").Count()
 	if err != nil {
 		beego.Info("select failed")
 		return
@@ -51,12 +39,6 @@ func (c *MainController) ShowIndex() {
 
 	start := 10 * (pageIndex - 1)
 
-	_, err = qs.Limit(10, start, start+10).All(&article)
-	if err != nil {
-		beego.Info(err)
-		return
-	}
-
 	pageSize := count / 10
 	if count%10 != 0 {
 		pageSize += 1
@@ -72,6 +54,21 @@ func (c *MainController) ShowIndex() {
 		beego.Info(err)
 	}
 
+	typeName := c.GetString("select")
+	// 初始的时候没有类型
+	if typeName == "" {
+		_, err = qs.Limit(10, start, start+10).RelatedSel("AtypeName").All(&article)
+		if err != nil {
+			beego.Info(err)
+			return
+		}
+	} else {
+		_, err = qs.Limit(10, start, start+10).RelatedSel("AtypeName").Filter("AtypeName__TypeName", typeName).All(&article)
+		if err != nil {
+			beego.Info(err)
+		}
+	}
+
 	c.Data["types"] = artiType
 	c.Data["count"] = count
 	c.Data["pageSize"] = pageSize
@@ -81,44 +78,74 @@ func (c *MainController) ShowIndex() {
 }
 
 func (c *MainController) ShowAdd() {
+	var artiType []*models.ArticleType
+	o := orm.NewOrm()
+	_, err := o.QueryTable("article_type").All(&artiType)
+	if err != nil {
+		beego.Info(err)
+		c.Redirect("/index", 302)
+		return
+	}
+	c.Data["artiType"] = artiType
 	c.TplName = "add.html"
 }
 
 func (c *MainController) HandleAdd() {
 	artiName := c.GetString("articleName")
 	artiContent := c.GetString("content")
+	id, err := c.GetInt("select")
+	if err != nil {
+		beego.Info("获取类型错误")
+		return
+	}
 	f, h, err := c.GetFile("uploadname")
+	defer f.Close()
 
-	beego.Info(artiName, artiContent)
-	if artiName == "" || artiContent == "" {
-		beego.Info("content invaild")
+	fileext := path.Ext(h.Filename)
+
+	if fileext != ".jpg" && fileext != "png" {
+		beego.Info("上传文件格式错误")
 		return
 	}
 
+	if h.Size > 50000000 {
+		beego.Info("上传文件过大")
+		return
+	}
+	filename := time.Now().Format("2006-01-02 15:04:05") + fileext //6-1-2 3:4:5
+
 	if err != nil {
-		beego.Info("upload image failed")
+		beego.Info("上传文件失败")
+		return
 	} else {
-		defer f.Close()
-		err = c.SaveToFile("uploadname", "./static/img/"+time.Now().Format("2006-01-02 15-04-05")+":"+h.Filename)
-		if err != nil {
-			beego.Info("save img failed")
-			return
-		}
+		c.SaveToFile("uploadname", "./static/img/"+filename)
 	}
 
-	o := orm.NewOrm()
-	arti := models.Article{
-		Aname:    artiName,
-		Acontent: artiContent,
-		Aimg:     "./static/img/" + time.Now().Format("2006-01-02 15-04-05") + ":" + h.Filename,
-		Acount:   0,
-		Atime:    time.Now().Local(),
+	if artiContent == "" || artiName == "" {
+		beego.Info("添加文章数据错误")
+		return
 	}
+	o := orm.NewOrm()
+	arti := models.Article{}
+	arti.Aname = artiName
+	arti.Acontent = artiContent
+	arti.Aimg = "./static/img/" + filename
+
+	artiType := models.ArticleType{Id: id}
+	o.Read(&artiType)
+	if artiType.TypeName == "" {
+		beego.Info("null type")
+		c.Redirect("/addarticle", 302)
+		return
+	}
+	arti.AtypeName = &artiType
+
 	_, err = o.Insert(&arti)
 	if err != nil {
-		beego.Info("insert failed", err)
+		beego.Info("插入数据库错误")
 		return
 	}
+
 	c.Redirect("/index", 302)
 }
 

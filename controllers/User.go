@@ -55,7 +55,8 @@ func (c *UserController) Post() {
 	userName := c.GetString("username")
 	userPwd := c.GetString("password")
 	if userName == "" || userPwd == "" {
-		c.Redirect("/", 302)
+		c.Redirect("/register", 302)
+		return
 	}
 	o := orm.NewOrm()
 	_, err := o.Insert(&models.User{Name: userName, Pwd: userPwd})

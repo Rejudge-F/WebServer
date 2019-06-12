@@ -160,6 +160,7 @@ func (c *MainController) HandleAdd() {
 	_, err = o.Insert(&arti)
 	if err != nil {
 		beego.Info("插入数据库错误")
+		c.Redirect("/addarticle", 302)
 		return
 	}
 

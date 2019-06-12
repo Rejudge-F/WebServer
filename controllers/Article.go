@@ -243,6 +243,7 @@ func (c *MainController) HandleUpdate() {
 			err = c.SaveToFile("uploadname", fileName)
 			if err != nil {
 				beego.Info("save img failed")
+				c.Redirect("/index", 302)
 				return
 			}
 
@@ -266,6 +267,7 @@ func (c *MainController) HandleUpdate() {
 	_, err = o.Update(&arti)
 	if err != nil {
 		beego.Info("insert failed", err)
+		c.Redirect("/index", 302)
 		return
 	}
 	c.Redirect("/index", 302)

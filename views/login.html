@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="/static/css/main.css">
     <style type="text/css">
         body{
-            background-image:url("./static/img/login-bg.jpg");
+            background-image:url("../static/img/login-bg.jpg");
             background-position: center center;
             /* 背景图不平铺 */
             background-repeat: no-repeat;
@@ -27,9 +27,9 @@
     </div>
     <form  class="login_form"  name = "login"  method = "post" action="/login">
         <h1 class="login_title">用户登录</h1>
-        <input type="text"  class="input_txt" name = "username">
+        <input type="text"  class="input_txt" name = "username" value="{{.userName}}">
         <input type="password" name = "password"  class="input_txt">
-        <div class="remember"><input type="checkbox" name="remember" ><label>记住用户名</label></div>
+        <div class="remember"><input type="checkbox" name="remember" {{.check}}><label>记住用户名</label></div>
         <input type="submit" value="登 录" class="input_sub">
     </form>
 

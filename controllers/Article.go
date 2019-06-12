@@ -44,7 +44,7 @@ func (c *MainController) ShowIndex() {
 		pageSize += 1
 	}
 
-	if pageIndex == int(pageSize) {
+	if pageIndex >= int(pageSize) {
 		LastPage := true
 		c.Data["LastPage"] = LastPage
 	}

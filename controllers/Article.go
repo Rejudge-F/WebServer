@@ -18,6 +18,11 @@ func (c *MainController) HandleIndex() {
 }
 
 func (c *MainController) ShowIndex() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
 	o := orm.NewOrm()
 	var article []models.Article
 	qs := o.QueryTable("article")
@@ -78,6 +83,12 @@ func (c *MainController) ShowIndex() {
 }
 
 func (c *MainController) ShowAdd() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	var artiType []*models.ArticleType
 	o := orm.NewOrm()
 	_, err := o.QueryTable("article_type").All(&artiType)
@@ -91,6 +102,12 @@ func (c *MainController) ShowAdd() {
 }
 
 func (c *MainController) HandleAdd() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	artiName := c.GetString("articleName")
 	artiContent := c.GetString("content")
 	id, err := c.GetInt("select")
@@ -150,6 +167,12 @@ func (c *MainController) HandleAdd() {
 }
 
 func (c *MainController) ShowContent() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	id, err := c.GetInt("id")
 	if err != nil {
 		beego.Info("get id failed")
@@ -168,6 +191,12 @@ func (c *MainController) ShowContent() {
 }
 
 func (c *MainController) ShowUpdate() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	id, err := c.GetInt("id")
 	if err != nil {
 		beego.Info("get id failed", err)
@@ -185,6 +214,12 @@ func (c *MainController) ShowUpdate() {
 }
 
 func (c *MainController) HandleUpdate() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	id, _ := c.GetInt("id")
 	artiName := c.GetString("articleName")
 	artiContent := c.GetString("content")
@@ -236,6 +271,12 @@ func (c *MainController) HandleUpdate() {
 }
 
 func (c *MainController) HandleDelete() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	deleteId, err := c.GetInt("id")
 	if err != nil {
 		beego.Info(err)
@@ -253,6 +294,12 @@ func (c *MainController) HandleDelete() {
 }
 
 func (c *MainController) ShowType() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	var articleType []models.ArticleType
 	o := orm.NewOrm()
 	_, err := o.QueryTable("article_type").All(&articleType)
@@ -264,6 +311,12 @@ func (c *MainController) ShowType() {
 }
 
 func (c *MainController) HandleType() {
+	name := c.GetSession("userName")
+	if name == nil {
+		c.Redirect("/login", 302)
+		return
+	}
+
 	typeName := c.GetString("typeName")
 	if typeName == "" {
 		beego.Info("null name")

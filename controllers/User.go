@@ -42,6 +42,7 @@ func (c *UserController) HandleLogin() {
 		} else {
 			c.Ctx.SetCookie("userName", "null", -1)
 		}
+		c.SetSession("userName", userName)
 		//c.Ctx.WriteString("login successful")
 		c.Redirect("/index", 302)
 	}
@@ -65,4 +66,9 @@ func (c *UserController) Post() {
 		c.Data["username"] = userName
 		c.TplName = "login.html"
 	}
+}
+
+func (c *UserController) HandleLogout() {
+	c.DelSession("userName")
+	c.Redirect("/login", 302)
 }

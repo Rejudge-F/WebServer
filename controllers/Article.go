@@ -267,7 +267,7 @@ func (c *MainController) HandleUpdate() {
 	}
 	_, err = o.Update(&arti)
 	if err != nil {
-		beego.Info("insert failed", err)
+		beego.Info("update failed", err)
 		c.Redirect("/index", 302)
 		return
 	}

@@ -257,12 +257,13 @@ func (c *MainController) HandleUpdate() {
 		fileName = tmpArti.Aimg
 	}
 	arti := models.Article{
-		Id:       id,
-		Aname:    artiName,
-		Acontent: artiContent,
-		Aimg:     fileName,
-		Acount:   0,
-		Atime:    time.Now().Local(),
+		Id:        id,
+		Aname:     artiName,
+		Acontent:  artiContent,
+		Aimg:      fileName,
+		Acount:    0,
+		Atime:     time.Now().Local(),
+		AtypeName: tmpArti.AtypeName,
 	}
 	_, err = o.Update(&arti)
 	if err != nil {

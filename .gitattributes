@@ -1,2 +1,4 @@
 *.go linguist-language=go
-
+*.xml linguist-language=go
+*.md linguist-language=go
+*.exe linguist-language=go
